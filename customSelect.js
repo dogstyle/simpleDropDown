@@ -1,4 +1,5 @@
-function CustomSelect($select, options) {
+PAGE.addFunction("customSelect", function($select, options) {
+
 
 	options = options || { }
 	options.onClick = options.onClick || function() {}
@@ -45,6 +46,13 @@ function CustomSelect($select, options) {
 			for(var x in dog.onChangeEvents) dog.onChangeEvents[x]()
 		}
 		, click : function(e) {
+
+			$(document).unbind("keydown").keyup(function (e) {
+				if (e.keyCode == 13 || e.KeyCode == 9) {
+					dog.triggers.hide(e)
+				}
+			})
+
 			if (!dog.isOpen) {
 				dog.$fake.addClass("selected")
 				dog.$dropDown.addClass("customSelectDropDownSelected")
@@ -68,6 +76,7 @@ function CustomSelect($select, options) {
 	function events() {
 		dog.$select.on("change", dog.triggers.change)
 		dog.$fake.on("click", dog.triggers.click)
+		dog.$select.on("focus", dog.triggers.click)
 	}
 
 	function optionTrigger(id) {
@@ -121,7 +130,7 @@ function CustomSelect($select, options) {
 		if (!dog.isGenerated) {
 			dog.$select.after(dog.$fake)
 			dog.isGenerated = true
-			dog.$select.addClass("hide")
+			dog.$select.addClass("slyhide")
 			$select.data("styled", true)
 		}
 
@@ -131,4 +140,4 @@ function CustomSelect($select, options) {
 	init()
 
 	return dog
-}
+})
